@@ -37,4 +37,20 @@ router.post('/', async (req, res) => {
   }
 });
 
+// ✏️ Update tooth status for a patient
+router.put('/:patientId/:toothNumber', async (req, res) => {
+  const { patientId, toothNumber } = req.params;
+  const { status } = req.body;
+
+  const result = await db.query(
+    `UPDATE teeth
+     SET status = $1, last_updated = CURRENT_TIMESTAMP
+     WHERE patient_id = $2 AND tooth_number = $3
+     RETURNING *`,
+    [status, patientId, toothNumber]
+  );
+
+  res.json(result.rows[0]);
+});
+
 module.exports = router;
