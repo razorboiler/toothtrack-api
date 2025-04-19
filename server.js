@@ -1,20 +1,19 @@
-// Import the Express web framework so we can create our server
-const express = require('express');
-const app = express(); // Create an instance of the Express app
+// Import the Express web framework and CORS
+const express = require("express");
+const cors = require("cors"); // ✅ ADD THIS LINE
+const app = express();
 
 // Use port 3000 unless a different one is specified in the hosting environment
 const PORT = process.env.PORT || 3000;
 
+// Enable CORS for all routes
+app.use(cors()); // ✅ ADD THIS LINE
+
 // Middleware to parse incoming JSON requests
-// (So when someone sends data like { name: "Bob" }, we can read it)
 app.use(express.json());
 
-// 💡 Define our API routes by connecting them to their files in the /routes folder
-
-// For anything that starts with /api/users, use the code in routes/users.js
+// 🔁 Define our API routes by connecting them to their files in the /routes folder
 app.use('/api/users', require('./routes/users'));
-
-// Same for patients, teeth, x-rays, recommendations, appointments
 app.use('/api/patients', require('./routes/patients'));
 app.use('/api/teeth', require('./routes/teeth'));
 app.use('/api/xrays', require('./routes/xrays'));
