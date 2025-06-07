@@ -33,19 +33,25 @@ router.post('/', async (req, res) => {
   res.status(201).json(result.rows[0]);
 });
 
-// 📝 Update notes + treatment status for a patient
+// 📝 Update notes, treatment, and visit dates for a patient
 router.put('/:id', async (req, res) => {
-  const { notes, treatment_status } = req.body;
+  const { notes, treatment_status, last_visit, next_appointment } = req.body;
 
   try {
     const result = await db.query(
       `UPDATE patients
        SET notes = $1,
-           treatment_status = $2
-       WHERE id = $3
+           treatment_status = $2,
+           last_visit = $3,
+           next_appointment = $4
+       WHERE id = $5
        RETURNING *`,
-      [notes, treatment_status, req.params.id]
+      [notes, treatment_status, last_visit, next_appointment, req.params.id]
     );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
 
     res.json(result.rows[0]);
   } catch (err) {
