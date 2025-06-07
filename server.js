@@ -19,6 +19,7 @@ app.use('/api/teeth', require('./routes/teeth'));
 app.use('/api/xrays', require('./routes/xrays'));
 app.use('/api/recommendations', require('./routes/recommendations'));
 app.use('/api/appointments', require('./routes/appointments'));
+app.use("/api/admin", require("./routes/admin"));
 
 // Start the server and listen for requests on the specified port
 app.listen(PORT, () => {
